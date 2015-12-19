@@ -1,0 +1,1 @@
+Arduino code to use a Leonardo as a very cautious USB->Serial converter that handles the unforgiving UART in the Modela MDX-20

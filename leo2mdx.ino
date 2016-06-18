@@ -7,6 +7,7 @@ boolean wait_echo = true;
 
 int DSR_pin = 3;
 int DTR_pin = 2; 
+int led_pin = 13;
 
 boolean waiting = false;
 
@@ -21,6 +22,8 @@ void setup() {
   // CTS 
   pinMode(DTR_pin, INPUT);
 
+  pinMode(led_pin, OUTPUT);
+
   // set RTS
   digitalWrite(DSR_pin, HIGH);
 }
@@ -32,15 +35,21 @@ void loop() {
     Serial.write(inByte); 
   }
   
-    // read from port 0, send to port 1:
+  // read from port 0, send to port 1:
   if (Serial.available()) {
-    Serial1.flush();
+    //flushing here might send a char after DTR change
+    //but we checked DTR at the last read so it should be ok
+    //Serial1.flush();
     if (digitalRead(DTR_pin)==LOW) {
+      digitalWrite(led_pin,LOW);
       int inByte = Serial.read();
       Serial1.write(inByte);
       if (local_echo && Serial) Serial.write(inByte);
+      Serial1.flush();
       waiting = false;
     } else {
+      // DTR high
+      digitalWrite(led_pin,HIGH);
       if (wait_echo && !waiting && Serial) Serial.write("<---WAIT--->");
       waiting = true;
     }

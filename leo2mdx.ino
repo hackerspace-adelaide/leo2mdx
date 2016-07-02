@@ -2,8 +2,8 @@
 now using DTR flow control
 */
 
-boolean local_echo = true;
-boolean wait_echo = true;
+boolean local_echo = false;
+boolean wait_echo = false;
 
 int DSR_pin = 3;
 int DTR_pin = 2; 
